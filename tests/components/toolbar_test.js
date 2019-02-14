@@ -84,6 +84,22 @@ describe("Toolbar Component", () => {
           depth: 0,
           inlineStyleRanges: [],
           entityRanges: []
+        },
+        {
+          key: "ag7qs",
+          text: "",
+          type: "atomic",
+          depth: 0,
+          inlineStyleRanges: [],
+          entityRanges: []
+        },
+        {
+          key: "ag8qs",
+          text: "Foo Bar",
+          type: "unstyled",
+          depth: 0,
+          inlineStyleRanges: [],
+          entityRanges: []
         }
       ]
     };
@@ -182,6 +198,15 @@ describe("Toolbar Component", () => {
       });
 
       it("toggles block style", () => {
+        replaceSelection(
+          {
+            anchorKey: "ag6qs",
+            anchorOffset: 0,
+            focusKey: "ag8qs",
+            focusOffset: 5
+          },
+          testContext.wrapper
+        );
         const items = testContext.wrapper.find(ToolbarItem);
         const titleItem = items.at(2);
         const button = titleItem.find("button");
@@ -189,13 +214,22 @@ describe("Toolbar Component", () => {
         button.simulate("click");
 
         const editorState = testContext.wrapper.state("editorState");
-        const selection = editorState.getSelection();
-        const current = editorState
+        const firstBlock = editorState
           .getCurrentContent()
-          .getBlockForKey(selection.getStartKey())
+          .getBlockForKey("ag6qs")
+          .getType();
+        const atomicBlock = editorState
+          .getCurrentContent()
+          .getBlockForKey("ag7qs")
+          .getType();
+        const lastBlock = editorState
+          .getCurrentContent()
+          .getBlockForKey("ag8qs")
           .getType();
 
-        expect(current).toEqual("header-two");
+        expect(firstBlock).toEqual("header-two");
+        expect(atomicBlock).toEqual("atomic");
+        expect(lastBlock).toEqual("header-two");
       });
 
       it("triggers custom action", () => {
