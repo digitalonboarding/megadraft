@@ -40,7 +40,6 @@ export default class ToolbarWrapper extends Component {
           entityInputs={this.props.entityInputs}
           onChange={this.onChange}
           editorHasFocus={true}
-          shouldDisplayToolbarFn={this.props.shouldDisplayToolbarFn}
         />
       </div>
     );
@@ -157,26 +156,12 @@ describe("Toolbar Component", () => {
       expect(items).toHaveLength(1);
     });
 
-    it("renders when readOnly is set but shouldDisplayToolbarFn returns true", () => {
+    it("renders as null when readOnly is set", () => {
       const wrapper = mount(
         <ToolbarWrapper
           readOnly
           editorState={testContext.editorState}
           actions={testContext.actions}
-          shouldDisplayToolbarFn={() => true}
-        />
-      );
-      const toolbar = wrapper.find(Toolbar);
-      expect(toolbar.html()).not.toBeNull();
-    });
-
-    it("renders as null when readOnly is set and shouldDisplayToolbarFn returns false", () => {
-      const wrapper = mount(
-        <ToolbarWrapper
-          readOnly
-          editorState={testContext.editorState}
-          actions={testContext.actions}
-          shouldDisplayToolbarFn={() => false}
         />
       );
       const toolbar = wrapper.find(Toolbar);
